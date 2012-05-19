@@ -10,3 +10,11 @@
 *.lai
 *.la
 *.a
+
+# executables
+a.out
+
+# vhdl stuff
+*.cf
+*.ghw
+interpolator

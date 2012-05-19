@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.qpel_package.all;
 
 entity interpolator is
     port (
@@ -15,33 +16,10 @@ entity interpolator is
 end interpolator;
 
 architecture interpolator of interpolator is
-    component col_interpolator is
-    port (
-        a : in std_logic_vector(135 downto 0);
-        b : in std_logic_vector(135 downto 0);
-        s : out std_logic_vector(135 downto 0)
-    );
-    end component col_interpolator;
-
-    component row_interpolator is
-    port (
-        a : in std_logic_vector(151 downto 0);
-        s : out std_logic_vector(143 downto 0)
-    );
-    end component row_interpolator;
-
-    component diag_interpolator is
-    port (
-        sel : in std_logic;
-        a : in std_logic_vector(151 downto 0);
-        b : in std_logic_vector(151 downto 0);
-        s : out std_logic_vector(143 downto 0)
-    );
-    end component diag_interpolator;
-
     type state is (idle, interpolating);
     signal current_state : state;
 
+    signal din_s   : std_logic_vector(151 downto 0);
     signal line0   : std_logic_vector(151 downto 0);
     signal line1   : std_logic_vector(151 downto 0);
     signal sel     : std_logic;
@@ -75,16 +53,20 @@ begin
             case current_state is
                 when idle =>
                     if start = '1' then
+                        din_s   <= (others => '0');
                         counter <= 0;
                         line0   <= (others => '0');
                         line1   <= (others => '0');
                         current_state <= interpolating;
+                        sel <= '0';
                     end if;
                 when others =>
                     if counter < 17 then
                         counter <= counter + 1;
-                        line0   <= din;
+                        din_s   <= din;
+                        line0   <= din_s;
                         line1   <= line0;
+                        sel     <= not sel;
                     else
                         current_state <= idle;
                     end if;
@@ -94,12 +76,12 @@ begin
 
 
     col_interpolator_u : col_interpolator
-    port map (line0(143 downto 8), line1(143 downto 8), col);
+    port map (line0(143 downto 8), line1(143 downto 8), col_s);
 
     row_interpolator_u : row_interpolator
-    port map (line0, row);
+    port map (line0, row_s);
 
     diag_interpolator_u : diag_interpolator
-    port map (sel, line0, line1, diag);
+    port map (sel, line0, line1, diag_s);
 end interpolator;
 
