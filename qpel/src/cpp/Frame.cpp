@@ -1,6 +1,6 @@
 #include "Frame.h"
 
-Frame::Frame(int w = 640, int h = 480) {
+Frame::Frame(int w, int h) {
     width  = w;
     height = h;
 
@@ -74,4 +74,48 @@ void Frame::set_cb(int i, int j, unsigned char cb) {
 
 void Frame::set_cr(int i, int j, unsigned char cr) {
     pixels[i][j].blue = cr;
+}
+
+unsigned char Frame::get_red(int i, int j) {
+    return pixels[i][j].red;
+}
+
+unsigned char Frame::get_green(int i, int j) {
+    return pixels[i][j].green;
+}
+
+unsigned char Frame::get_blue(int i, int j) {
+    return pixels[i][j].blue;
+}
+
+unsigned char Frame::get_luma(int i, int j) {
+    return pixels[i][j].red;
+}
+
+unsigned char Frame::get_cb(int i, int j) {
+    return pixels[i][j].green;
+}
+
+unsigned char Frame::get_cr(int i, int j) {
+    return pixels[i][j].blue;
+}
+
+//PPM functions
+void Frame::save_yuv420_as_PPM(char* filename) {
+    FILE* file;
+    int i;
+    int j;
+    unsigned char c;
+
+    file = fopen(filename, "w");
+    fprintf(file, "P3\n%i %i\n255\n", width, height);
+
+    for (i = 0; i < height; ++i) {
+        for (j = 0; j < width; ++j) {
+            c = get_luma(i, j);
+            fprintf(file, "%i %i %i\n", c, c, c);
+        }
+    }
+
+    fclose(file);
 }

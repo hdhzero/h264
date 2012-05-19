@@ -9,8 +9,11 @@ typedef struct Pixel {
     unsigned char blue;
 } Pixel;
 
+typedef enum PixelType { RGB, YCBCR420 } PixelType;
+
 class Frame {
     private:
+        PixelType pixel_type;
         int width;
         int height;
         Pixel** pixels;
@@ -28,6 +31,17 @@ class Frame {
         void set_luma(int i, int j, unsigned char luma);
         void set_cb(int i, int j, unsigned char cb);
         void set_cr(int i, int j, unsigned char cr);
+
+        unsigned char get_red(int i, int j);
+        unsigned char get_green(int i, int j);
+        unsigned char get_blue(int i, int j);
+
+        unsigned char get_luma(int i, int j);
+        unsigned char get_cb(int i, int j);
+        unsigned char get_cr(int i, int j);
+
+        //PPM functions
+        void save_yuv420_as_PPM(char* filename);
 };
 
 #endif
