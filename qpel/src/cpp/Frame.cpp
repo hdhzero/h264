@@ -119,3 +119,41 @@ void Frame::save_yuv420_as_PPM(char* filename) {
 
     fclose(file);
 }
+
+//aux methods
+
+unsigned char clip(int v) {
+    if (v < 0)
+        v = 0;
+    else if (v > 255)
+        v = 255;
+    
+    return (unsigned char) v;
+}
+
+unsigned char Frame::hp_filter(int i, int j, int option) {
+    int A, B, C, D, E, F;
+    int res;
+
+    /* vertical & diagonal */
+    if (option == 0 || option == 2) {
+        A = 0x000000FF & luma_at(f, i - 5, j);
+        B = 0x000000FF & luma_at(f, i - 3, j);
+        C = 0x000000FF & luma_at(f, i - 1, j);
+        D = 0x000000FF & luma_at(f, i + 1, j);
+        E = 0x000000FF & luma_at(f, i + 3, j);
+        F = 0x000000FF & luma_at(f, i + 5, j);
+    }
+    else { /* horizontal */
+        A = 0x000000FF & luma_at(f, i, j - 5);
+        B = 0x000000FF & luma_at(f, i, j - 3);
+        C = 0x000000FF & luma_at(f, i, j - 1);
+        D = 0x000000FF & luma_at(f, i, j + 1);
+        E = 0x000000FF & luma_at(f, i, j + 3);
+        F = 0x000000FF & luma_at(f, i, j + 5);
+    }
+
+    res = A - 5 * B + 20 * C + 20 * D - 5 * E + F;
+
+    return clip((res + 16) >> 5);
+}

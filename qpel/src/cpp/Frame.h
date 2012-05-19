@@ -42,6 +42,14 @@ class Frame {
 
         //PPM functions
         void save_yuv420_as_PPM(char* filename);
+
+
+    //aux methods
+    private:
+        unsigned char clip(int v);
+        unsigned char hp_filter(int i, int j, int option);
+
+
 };
 
 #endif
