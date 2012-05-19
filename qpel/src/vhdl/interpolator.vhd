@@ -19,7 +19,6 @@ architecture interpolator of interpolator is
     type state is (idle, interpolating);
     signal current_state : state;
 
-    signal din_s   : std_logic_vector(151 downto 0);
     signal line0   : std_logic_vector(151 downto 0);
     signal line1   : std_logic_vector(151 downto 0);
     signal sel     : std_logic;
@@ -53,7 +52,6 @@ begin
             case current_state is
                 when idle =>
                     if start = '1' then
-                        din_s   <= (others => '0');
                         counter <= 0;
                         line0   <= (others => '0');
                         line1   <= (others => '0');
@@ -63,8 +61,7 @@ begin
                 when others =>
                     if counter < 17 then
                         counter <= counter + 1;
-                        din_s   <= din;
-                        line0   <= din_s;
+                        line0   <= din;
                         line1   <= line0;
                         sel     <= not sel;
                     else
