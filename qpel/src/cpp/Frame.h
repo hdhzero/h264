@@ -21,7 +21,13 @@ class Frame {
     public:
         Frame(int w = 640, int h = 480);
         ~Frame();
+
+        //file functions
         void set_from_yuv420_file(FILE* file);
+
+
+        //interpolation functions
+        void hp_interpolation();
 
         //pixel functions
         void set_red(int i, int j, unsigned char red);
@@ -46,8 +52,11 @@ class Frame {
 
     //aux methods
     private:
+        void double_frame();
         unsigned char clip(int v);
         unsigned char hp_filter(int i, int j, int option);
+        unsigned char qp_filter(int i, int j, int option);
+        
 
 
 };

@@ -1,6 +1,18 @@
 #include "Frame.h"
 
+#include <cstdio>
+
 int main() {
-    Frame f;
+    FILE* file = fopen("akiyo_qcif.yuv", "rb");
+
+    if (file == NULL) { printf("erro\n"); return -1; }
+
+    Frame f(176, 144);
+    printf("1\n");
+    f.set_from_yuv420_file(file);
+    f.hp_interpolation();
+    printf("2\n");
+
+    f.save_yuv420_as_PPM("teste.ppm");
     return 0;
 }

@@ -18,3 +18,12 @@ a.out
 *.cf
 *.ghw
 interpolator
+
+# videos
+*.yuv
+
+# vim stuff
+*.swp
+
+# images
+*.ppm
