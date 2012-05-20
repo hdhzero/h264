@@ -25,7 +25,6 @@ class Frame {
         //file functions
         void set_from_yuv420_file(FILE* file);
 
-
         //interpolation functions
         void hp_interpolation();
 
@@ -48,6 +47,9 @@ class Frame {
 
         //PPM functions
         void save_yuv420_as_PPM(char* filename);
+
+        //binary files
+        void save_as_bintxt(char* filename);
 
 
     //aux methods

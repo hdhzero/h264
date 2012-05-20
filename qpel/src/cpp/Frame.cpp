@@ -224,7 +224,7 @@ unsigned char Frame::get_luma(int i, int j) {
 unsigned char Frame::get_cb(int i, int j) {
     if (i < 0)
         i = 0;
-    else if (i >= height)
+        else if (i >= height)
         i = height - 1;
 
     if (j < 0)
@@ -267,6 +267,33 @@ void Frame::save_yuv420_as_PPM(char* filename) {
     }
 
     fclose(file);
+}
+
+void Frame::save_as_bintxt(char* filename) {
+    FILE* file;
+    int i;
+    int j;
+    int k;
+    unsigned char c;
+
+    file = fopen(filename, "w");
+
+    for (i = 0; i < height; ++i) {
+        for (j = 0; j < width; ++j) {
+            c = get_luma(i, j);
+
+            for (k = 7; k >= 0; --k) {
+                if (c & (1 << k))
+                    fprintf(file, "1");
+                else
+                    fprintf(file, "0");
+            }
+
+            fprintf(file, "\n");
+        }
+    }
+
+    fclose(file);            
 }
 
 //aux methods

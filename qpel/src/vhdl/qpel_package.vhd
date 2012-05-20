@@ -56,4 +56,18 @@ package qpel_package is
     );
     end component interpolator;
 
+    ---------------------------------------------
+    -- Functions
+    ---------------------------------------------
+
+    function str2std(s : string(8 downto 1)) return std_logic_vector;
+
+
 end qpel_package;
+
+package body qpel_package is
+    function str2std(s : string(8 downto 1)) return std_logic_vector is
+        variable vetor : std_logic_vector(7 downto 0);
+    begin
+        
+end package body;

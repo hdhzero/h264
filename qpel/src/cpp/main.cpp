@@ -14,5 +14,6 @@ int main() {
     printf("2\n");
 
     f.save_yuv420_as_PPM("teste.ppm");
+    f.save_as_bintxt("binario.txt");
     return 0;
 }
