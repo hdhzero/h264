@@ -10,10 +10,14 @@ int main() {
     Frame f(176, 144);
     printf("1\n");
     f.set_from_yuv420_file(file);
-    f.hp_interpolation();
-    printf("2\n");
 
-    f.save_yuv420_as_PPM("teste.ppm");
-    f.save_as_bintxt("binario.txt");
+    f.save_yuv420_as_PPM("pel.ppm");
+
+    f.hp_interpolation();
+    f.save_yuv420_as_PPM("hp.ppm");
+
+    f.qp_interpolation();
+    f.save_yuv420_as_PPM("qp.ppm");
+
     return 0;
 }

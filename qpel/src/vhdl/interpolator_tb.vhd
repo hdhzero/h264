@@ -23,7 +23,13 @@ begin
     end process;
 
     process
+        file inputFile  : text;
+        variable file_line : line;
+
+        variable din_v : std_logic_vector(151 downto 0);
     begin
+        file_open(inputFile, "interpolator_tb.txt", READ_MODE);
+    
         reset <= '1';
         start <= '0';
         din   <= (others => '0');

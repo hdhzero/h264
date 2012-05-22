@@ -79,6 +79,31 @@ void Frame::hp_interpolation() {
     }
 }
 
+void Frame::qp_interpolation() {
+    int i, j;
+    int option;
+
+    option = 4;
+    double_frame();
+
+    for (i = 0; i < height; ++i) {
+        for (j = 0; j < width; ++j) {
+            if (i % 2 == 0 && j % 2 != 0)
+                set_luma(i, j, qp_filter(i, j, 0));
+            else if (i % 2 != 0 && j % 2 == 0)
+                set_luma(i, j, qp_filter(i, j, 1));
+        }
+    }
+
+    for (i = 0; i < height; i += 2) {
+        for (j = 0; j < width; j += 2) {
+            if (i % 2 == 0 && j % 2 == 0) {
+                option = option == 4 ? 3 : 4;
+                set_luma(i, j, qp_filter(i, j, option));
+            }
+        }
+    }
+}
 
 //pixel functions
 void Frame::set_red(int i, int j, unsigned char red) {

@@ -27,6 +27,7 @@ class Frame {
 
         //interpolation functions
         void hp_interpolation();
+        void qp_interpolation();
 
         //pixel functions
         void set_red(int i, int j, unsigned char red);
