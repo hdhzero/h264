@@ -27,3 +27,6 @@ interpolator
 
 # images
 *.ppm
+
+# bins
+*.vidtxt

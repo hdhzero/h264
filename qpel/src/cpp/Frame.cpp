@@ -294,7 +294,27 @@ void Frame::save_yuv420_as_PPM(char* filename) {
     fclose(file);
 }
 
-void Frame::save_as_bintxt(char* filename) {
+void Frame::save_macroblock_as_PPM(int i0, int j0, int i1, int j1, char* filename) {
+    FILE* file;
+    int i;
+    int j;
+    unsigned char c;
+
+    file = fopen(filename, "w");
+    fprintf(file, "P3\n%i %i\n255\n", j1 - j0, i1 - i0);
+
+    for (i = i0; i < i1; ++i) {
+        for (j = j0; j < j1; ++j) {
+            c = get_luma(i, j);
+            fprintf(file, "%i %i %i\n", c, c, c);
+        }
+    }
+
+    fclose(file);
+}
+
+
+void Frame::save_as_byte_txt(char* filename) {
     FILE* file;
     int i;
     int j;
@@ -319,6 +339,57 @@ void Frame::save_as_bintxt(char* filename) {
     }
 
     fclose(file);            
+}
+
+void Frame::save_as_line_txt(char* filename) {
+    FILE* file;
+    int i;
+    int j;
+    int k;
+    unsigned char c;
+
+    file = fopen(filename, "w");
+
+    for (i = 0; i < height; ++i) {
+        for (j = 0; j < width; ++j) {
+            c = get_luma(i, j);
+
+            for (k = 7; k >= 0; --k) {
+                if (c & (1 << k))
+                    fprintf(file, "1");
+                else
+                    fprintf(file, "0");
+            }
+        }
+
+        fprintf(file, "\n");
+    }
+}
+
+void Frame::save_macroblock(int i0, int j0, int i1, int j1, char* filename) {
+    FILE* file;
+    int i;
+    int j;
+    int k;
+    unsigned char c;
+
+    file = fopen(filename, "w");
+
+    for (i = i0; i < i1; ++i) {
+        for (j = j0; j < j1; ++j) {
+            c = get_luma(i, j);
+
+            for (k = 7; k >= 0; --k) {
+                if (c & (1 << k))
+                    fprintf(file, "1");
+                else
+                    fprintf(file, "0");
+            }
+        }
+
+        fprintf(file, "\n");
+    }
+
 }
 
 //aux methods

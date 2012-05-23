@@ -15,6 +15,8 @@ int main() {
 
     f.hp_interpolation();
     f.save_yuv420_as_PPM("hp.ppm");
+    f.save_macroblock(0, 0, 19, 19, "line.vidtxt");
+    f.save_macroblock_as_PPM(0, 0, 19, 19, "line.ppm");
 
     f.qp_interpolation();
     f.save_yuv420_as_PPM("qp.ppm");
