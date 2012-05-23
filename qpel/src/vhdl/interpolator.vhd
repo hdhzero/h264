@@ -59,7 +59,7 @@ begin
                         sel <= '0';
                     end if;
                 when others =>
-                    if counter < 17 then
+                    if counter < 19 then
                         counter <= counter + 1;
                         line0   <= din;
                         line1   <= line0;
