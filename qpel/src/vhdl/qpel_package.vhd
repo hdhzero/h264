@@ -46,13 +46,20 @@ package qpel_package is
 
     component interpolator is
     port (
-        clock : in std_logic;
-        reset : in std_logic;
-        start : in std_logic;
-        din   : in  std_logic_vector(151 downto 0);
-        col   : out std_logic_vector(135 downto 0);
-        row   : out std_logic_vector(143 downto 0);
-        diag  : out std_logic_vector(143 downto 0)
+        clock_i : in std_logic;
+        reset_i : in std_logic;
+        start_i : in std_logic;
+        din_i   : in  std_logic_vector(151 downto 0);
+        done_o  : out std_logic;
+        col_o   : out std_logic_vector(135 downto 0);
+        row_o   : out std_logic_vector(143 downto 0);
+        diag_o  : out std_logic_vector(143 downto 0);
+        col_wren_o  : out std_logic;
+        row_wren_o  : out std_logic;
+        diag_wren_o : out std_logic;
+        col_addr_o  : out std_logic_vector(5 downto 0);
+        row_addr_o  : out std_logic_vector(5 downto 0);
+        diag_addr_o : out std_logic_vector(5 downto 0)
     );
     end component interpolator;
 end qpel_package;
