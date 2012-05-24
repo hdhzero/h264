@@ -17,6 +17,7 @@ int main() {
 
     f.qp_interpolation();
     f.save_rcd(6, 6, 41, 41);
+    f.save_rcdHEX(6, 6, 41, 41);
     f.save_macroblock(6, 6, 41, 41, "qp.vidtxt");
 
     return 0;

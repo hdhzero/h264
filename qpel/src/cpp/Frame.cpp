@@ -418,6 +418,60 @@ void Frame::save_rcd(int i0, int j0, int i1, int j1) {
     fclose(diag);
 }
 
+void Frame::save_rcdHEX(int i0, int j0, int i1, int j1) {
+    FILE* row;
+    FILE* col;
+    FILE* diag;
+    FILE* file = NULL;
+    int i;
+    int j;
+    int k;
+    unsigned char c;
+
+    row  = fopen("rowHEX.txt", "w");
+    col  = fopen("colHEX.txt", "w");
+    diag = fopen("diagHEX.txt", "w");
+    
+
+    for (i = i0; i < i1; ++i) {
+        for (j = j0; j < j1; ++j) {
+            c = get_luma(i, j);
+            file = NULL;
+
+            if (i % 2 == 0 && j % 2 == 0) {
+                file = diag; 
+            }
+            else if (i % 2 == 0 && j % 2 != 0) {
+                file = col;
+            }
+            else if (i % 2 != 0 && j % 2 == 0) {
+                file = row;
+            }
+
+            if (file != NULL) {
+                if (c < 10 ) {
+                    fprintf(file, "0%X", (unsigned int) c);
+                }
+                else {
+                    fprintf(file, "%X", (unsigned int) c);
+                }
+            }
+        }
+
+        if (i % 2 == 0) {
+            fprintf(diag, "\n");
+            fprintf(col, "\n");
+        }
+        else {
+            fprintf(row, "\n");
+        }
+    }
+
+    fclose(row);
+    fclose(col);
+    fclose(diag);
+}
+
 void Frame::save_macroblock(int i0, int j0, int i1, int j1, char* filename) {
     FILE* file;
     int i;
