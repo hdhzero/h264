@@ -53,6 +53,7 @@ class Frame {
         //binary files
         void save_as_byte_txt(char* filename);
         void save_as_line_txt(char* filename);
+        void save_rcd(int i0, int j0, int i1, int j1); 
         void save_macroblock(int i0, int j0, int i1, int j1, char* filename);
 
 

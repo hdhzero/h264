@@ -366,6 +366,58 @@ void Frame::save_as_line_txt(char* filename) {
     }
 }
 
+void Frame::save_rcd(int i0, int j0, int i1, int j1) {
+    FILE* row;
+    FILE* col;
+    FILE* diag;
+    FILE* file = NULL;
+    int i;
+    int j;
+    int k;
+    unsigned char c;
+
+    row  = fopen("row.txt", "w");
+    col  = fopen("col.txt", "w");
+    diag = fopen("diag.txt", "w");
+    
+
+    for (i = i0; i < i1; ++i) {
+        for (j = j0; j < j1; ++j) {
+            c = get_luma(i, j);
+            file = NULL;
+
+            if (i % 2 == 0 && j % 2 == 0) {
+                file = diag; 
+            }
+            else if (i % 2 == 0 && j % 2 != 0) {
+                file = col;
+            }
+            else if (i % 2 != 0 && j % 2 == 0) {
+                file = row;
+            }
+
+            for (k = 7; file != NULL && k >= 0; --k) {
+                if (c & (1 << k))
+                    fprintf(file, "1");
+                else
+                    fprintf(file, "0");
+            }
+        }
+
+        if (i % 2 == 0) {
+            fprintf(diag, "\n");
+            fprintf(col, "\n");
+        }
+        else {
+            fprintf(row, "\n");
+        }
+    }
+
+    fclose(row);
+    fclose(col);
+    fclose(diag);
+}
+
 void Frame::save_macroblock(int i0, int j0, int i1, int j1, char* filename) {
     FILE* file;
     int i;

@@ -11,15 +11,13 @@ int main() {
     printf("1\n");
     f.set_from_yuv420_file(file);
 
-    f.save_yuv420_as_PPM("pel.ppm");
-
     f.hp_interpolation();
-    f.save_yuv420_as_PPM("hp.ppm");
-    f.save_macroblock(0, 0, 19, 19, "line.vidtxt");
     f.save_macroblock_as_PPM(0, 0, 19, 19, "line.ppm");
+    f.save_macroblock(2, 2, 21, 21, "hp.vidtxt");
 
     f.qp_interpolation();
-    f.save_yuv420_as_PPM("qp.ppm");
+    f.save_rcd(6, 6, 41, 41);
+    f.save_macroblock(6, 6, 41, 41, "qp.vidtxt");
 
     return 0;
 }
