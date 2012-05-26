@@ -27,7 +27,7 @@ end control;
 
 architecture control of control is
     type state is (idle, interpolating1, interpolating2, 
-        interpolating3, interpolating4, end_interpolation);
+        interpolating3, interpolating4, interpolating5, end_interpolation);
 
     signal current_state : state;
     signal next_state    : state;
@@ -131,6 +131,21 @@ begin
 
             when interpolating2 =>
                 done_s    <= '0';
+                sel_s     <= '0';
+                counter_s <= 0;
+
+                col_wren_s  <= '0';
+                row_wren_s  <= '0';
+                diag_wren_s <= '0';
+
+                col_addr_s  <= "00000";
+                row_addr_s  <= "00000";
+                diag_addr_s <= "00000";
+
+                next_state <= interpolating3;
+
+            when interpolating3 =>
+                done_s    <= '0';
                 sel_s     <= not sel;
                 counter_s <= 0;
 
@@ -142,9 +157,9 @@ begin
                 row_addr_s  <= "00000";
                 diag_addr_s <= std_logic_vector(unsigned(diag_addr) + "00001");
 
-                next_state <= interpolating3;
+                next_state <= interpolating4;
 
-             when interpolating3 =>
+             when interpolating4 =>
                 done_s    <= '0';
                 sel_s     <= not sel;
                 counter_s <= counter + 1;
@@ -158,12 +173,12 @@ begin
                 diag_addr_s <= std_logic_vector(unsigned(diag_addr) + "00001");
                
                 if counter < 17 then
-                    next_state <= interpolating3;
-                else
                     next_state <= interpolating4;
+                else
+                    next_state <= interpolating5;
                 end if;
 
-            when interpolating4 =>
+            when interpolating5 =>
                 done_s    <= '0';
                 sel_s     <= not sel;
                 counter_s <= 0;

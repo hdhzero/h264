@@ -63,10 +63,12 @@ begin
         reset_i => reset_i,
         start_i => start_i,
 
+        pel_wren_o  => pel_wren_w,
         col_wren_o  => col_wren_w,
         row_wren_o  => row_wren_w,
         diag_wren_o => diag_wren_w,
 
+        pel_addr_o => pel_addr_w,
         col_addr_o => col_addr_w,
         row_addr_o => row_addr_w,
         diag_addr_o => diag_addr_w,

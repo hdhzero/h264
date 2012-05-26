@@ -63,10 +63,12 @@ package qpel_package is
         reset_i : in std_logic;
         start_i : in std_logic;
 
+        pel_wren_o  : out std_logic;
         col_wren_o  : out std_logic;
         row_wren_o  : out std_logic;
         diag_wren_o : out std_logic;
 
+        pel_addr_o  : out std_logic_vector(2 downto 0);
         col_addr_o  : out std_logic_vector(4 downto 0);
         row_addr_o  : out std_logic_vector(4 downto 0);
         diag_addr_o : out std_logic_vector(4 downto 0);
