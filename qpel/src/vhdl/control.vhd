@@ -26,8 +26,8 @@ entity control is
 end control;
 
 architecture control of control is
-    type state is (idle, interpolating1, interpolating2, 
-        interpolating3, interpolating4, interpolating5, end_interpolation);
+    type state is (idle, interpolating1, interpolating2, interpolating1A,
+        interpolating3, interpolating4, interpolating5, interpolating6, end_interpolation);
 
     signal current_state : state;
     signal next_state    : state;
@@ -115,28 +115,32 @@ begin
                 end if;
 
             when interpolating1 =>
-                done_s    <= '0';
-                sel_s     <= '0';
-                counter_s <= 0;
+                done_s <= '0';
+                sel_s  <= '0';
+                counter_s <= counter + 1;
 
-                col_wren_s  <= '0';
-                row_wren_s  <= '0';
+                col_wren_s <= '0';
+                row_wren_s <= '0';
                 diag_wren_s <= '0';
 
                 col_addr_s  <= "00000";
                 row_addr_s  <= "00000";
                 diag_addr_s <= "00000";
 
-                next_state <= interpolating2;
+                if counter < 1 then
+                    next_state <= interpolating1;
+                else
+                    next_state <= interpolating2;
+                end if;
 
             when interpolating2 =>
-                done_s    <= '0';
-                sel_s     <= '0';
+                done_s <= '0';
+                sel_s  <= '0';
                 counter_s <= 0;
 
-                col_wren_s  <= '0';
-                row_wren_s  <= '0';
-                diag_wren_s <= '0';
+                col_wren_s <= '1';
+                row_wren_s <= '0';
+                diag_wren_s <= '1';
 
                 col_addr_s  <= "00000";
                 row_addr_s  <= "00000";
@@ -145,12 +149,12 @@ begin
                 next_state <= interpolating3;
 
             when interpolating3 =>
-                done_s    <= '0';
-                sel_s     <= not sel;
+                done_s <= '0';
+                sel_s  <= not sel;
                 counter_s <= 0;
 
-                col_wren_s  <= '1';
-                row_wren_s  <= '0';
+                col_wren_s <= '1';
+                row_wren_s <= '1';
                 diag_wren_s <= '1';
 
                 col_addr_s  <= std_logic_vector(unsigned(col_addr) + "00001");
@@ -159,47 +163,46 @@ begin
 
                 next_state <= interpolating4;
 
-             when interpolating4 =>
-                done_s    <= '0';
-                sel_s     <= not sel;
+            when interpolating4 =>
+                done_s <= '0';
+                sel_s  <= not sel;
                 counter_s <= counter + 1;
 
-                col_wren_s  <= '1';
-                row_wren_s  <= '1';
+                col_wren_s <= '1';
+                row_wren_s <= '1';
                 diag_wren_s <= '1';
 
                 col_addr_s  <= std_logic_vector(unsigned(col_addr) + "00001");
                 row_addr_s  <= std_logic_vector(unsigned(row_addr) + "00001");
                 diag_addr_s <= std_logic_vector(unsigned(diag_addr) + "00001");
-               
-                if counter < 17 then
+
+                if counter < 15 then
                     next_state <= interpolating4;
                 else
                     next_state <= interpolating5;
                 end if;
 
             when interpolating5 =>
-                done_s    <= '0';
-                sel_s     <= not sel;
+                done_s <= '0';
+                sel_s  <= not sel;
                 counter_s <= 0;
 
-                col_wren_s  <= '1';
-                row_wren_s  <= '0';
+                col_wren_s <= '1';
+                row_wren_s <= '0';
                 diag_wren_s <= '1';
 
                 col_addr_s  <= std_logic_vector(unsigned(col_addr) + "00001");
                 row_addr_s  <= "00000";
                 diag_addr_s <= std_logic_vector(unsigned(diag_addr) + "00001");
-
                 next_state <= end_interpolation;
 
-            when end_interpolation =>
-                done_s    <= '1';
-                sel_s     <= '0';
+            when end_interpolation=>
+                done_s <= '0';
+                sel_s  <= '0';
                 counter_s <= 0;
 
-                col_wren_s  <= '0';
-                row_wren_s  <= '0';
+                col_wren_s <= '0';
+                row_wren_s <= '0';
                 diag_wren_s <= '0';
 
                 col_addr_s  <= "00000";
@@ -209,7 +212,9 @@ begin
                 next_state <= idle;
 
             when others =>
-                sel_s <= '0';
+                done_s    <= '0';
+                sel_s     <= '0';
+                counter_s <= 0;
 
                 col_wren_s  <= '0';
                 row_wren_s  <= '0';
