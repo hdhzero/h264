@@ -1,29 +1,30 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.hpel_package.all;
 
-entity memory is
+entity hp_memory is
     port (
-        clock : in std_logic;
-        wren  : in std_logic;
-        addr  : in std_logic_vector;
-        din   : in std_logic_vector;
-        dout  : out std_logic_vector
+        clock_i : in std_logic;
+        wren_i  : in std_logic;
+        addr_i  : in std_logic_vector;
+        din_i   : in std_logic_vector;
+        dout_o  : out std_logic_vector
     );
-end memory;
+end hp_memory;
 
-architecture memory of memory is
-    type ram is array (0 to 2 ** addr'length - 1) of std_logic_vector(din'range);
+architecture hp_memory of hp_memory is
+    type ram is array (0 to 2 ** addr_i'length - 1) of std_logic_vector(din_i'range);
     signal mem : ram;
 begin
-    process(clock, wren, din, addr)
+    process(clock_i, wren_i, din_i, addr_i)
     begin
-        if clock'event and clock = '1' then
-            if wren = '1' then
-                mem(to_integer(unsigned(addr))) <= din;
+        if clock_i'event and clock = '1' then
+            if wren_i = '1' then
+                mem(to_integer(unsigned(addr_i))) <= din_i;
             end if;
 
-            dout <= mem(to_integer(unsigned(addr)));
+            dout_o <= mem(to_integer(unsigned(addr_i)));
         end if;
     end process;
-end memory;
+end hp_memory;

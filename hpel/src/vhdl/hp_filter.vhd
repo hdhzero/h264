@@ -1,8 +1,9 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.hpel_package.all;
 
-entity filter is
+entity hp_filter is
     port (
         a : in std_logic_vector(7 downto 0);
         b : in std_logic_vector(7 downto 0);
@@ -12,9 +13,9 @@ entity filter is
         f : in std_logic_vector(7 downto 0);
         s : out std_logic_vector(7 downto 0)
     );
-end filter;
+end hp_filter;
 
-architecture filter of filter is
+architecture hp_filter of hp_filter is
     signal af   : signed(15 downto 0);
     signal be   : signed(15 downto 0);
     signal cd   : signed(15 downto 0);
@@ -32,4 +33,4 @@ begin
     res  <= af + c2e4 + c2e;
     
     s    <= std_logic_vector(res(7 downto 0));
-end filter;
+end hp_filter;
