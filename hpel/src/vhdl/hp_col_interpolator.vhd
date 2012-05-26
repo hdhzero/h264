@@ -1,6 +1,7 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use work.hpel_package.all;
 
 entity hp_col_interpolator is
     port (
