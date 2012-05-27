@@ -56,8 +56,19 @@ begin
 
         file_close(inputFile);
         wait until clock_i'event and clock_i = '1';
+
+
+        wait until clock_i'event and clock_i = '1';
+        wait until clock_i'event and clock_i = '1';
+        wait until clock_i'event and clock_i = '1';
+        wait until clock_i'event and clock_i = '1';
+        wait until clock_i'event and clock_i = '1';
+        wait until clock_i'event and clock_i = '1';
+
         wait;
     end process;
+
+    
 
     hpel_u : hpel
     port map (
