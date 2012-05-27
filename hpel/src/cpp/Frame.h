@@ -50,12 +50,16 @@ class Frame {
         void save_yuv420_as_PPM(char* filename);
         void save_macroblock_as_PPM(int i0, int j0, int i1, int j1, char* filename);
 
+        //test functions
+        void gen_hp_macroblock_test(int i0, int j0);
+
         //binary files
         void save_as_byte_txt(char* filename);
         void save_as_line_txt(char* filename);
         void save_rcd(int i0, int j0, int i1, int j1);
         void save_rcdHEX(int i0, int j0, int i1, int j1); 
         void save_macroblock(int i0, int j0, int i1, int j1, char* filename);
+        void save_macroblockHEX(int i0, int j0, int i1, int j1, char* filename);
 
 
     //aux methods

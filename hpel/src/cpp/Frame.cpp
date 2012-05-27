@@ -313,6 +313,22 @@ void Frame::save_macroblock_as_PPM(int i0, int j0, int i1, int j1, char* filenam
     fclose(file);
 }
 
+//test functions
+void Frame::gen_hp_macroblock_test(int i0, int j0) {
+    int i;
+    int j;
+    int ii = (i0 + 2) * 2 + 2;
+    int jj = (j0 + 2) * 2 + 2;
+    int ie = (i0 + 11) * 2 + 2;
+    int je = (j0 + 11) * 2 + 2;
+
+    save_macroblock_as_PPM(i0, j0, i0 + 14, j0 + 14, "hp_ppm_test.ppm");
+    save_macroblock(i0, j0, i0 + 14, j0 + 14, "hp_bin_test.txt");
+    save_macroblockHEX(i0, j0, i0 + 14, j0 + 14, "hp_hex_test.txt");
+    hp_interpolation();
+    save_rcdHEX(ii, jj, ie, je);
+}
+
 
 void Frame::save_as_byte_txt(char* filename) {
     FILE* file;
@@ -496,6 +512,30 @@ void Frame::save_macroblock(int i0, int j0, int i1, int j1, char* filename) {
         fprintf(file, "\n");
     }
 
+}
+
+void Frame::save_macroblockHEX(int i0, int j0, int i1, int j1, char* filename) {
+    FILE* file;
+    int i;
+    int j;
+    int k;
+    unsigned char c;
+
+    file = fopen(filename, "w");
+
+    for (i = i0; i < i1; ++i) {
+        for (j = j0; j < j1; ++j) {
+            c = get_luma(i, j);
+
+            if (c < 10)
+                fprintf(file, "0%X", (unsigned int) c);
+            else
+                fprintf(file, "%X", (unsigned int) c);
+            
+        }
+
+        fprintf(file, "\n");
+    }
 }
 
 //aux methods

@@ -26,6 +26,10 @@ architecture hp_interpolator of hp_interpolator is
     signal row_s, row_reg   : std_logic_vector(71 downto 0);
     signal diag_s, diag_reg : std_logic_vector(71 downto 0);
 begin
+    col_o  <= col_reg(95 downto 16);
+    row_o  <= row_reg;
+    diag_o <= diag_reg;
+
     process(clock_i, reset_i, din_i, col_s, row_s, diag_s)
     begin
         if reset_i = '1' then
@@ -40,7 +44,7 @@ begin
             col_reg  <= (others => '0');
             diag_reg <= (others => '0');
 
-        elsif clock'event and clock = '1' then
+        elsif clock_i'event and clock_i = '1' then
             lineF <= din_i;
             lineE <= lineF;
             lineD <= lineE;
@@ -54,6 +58,15 @@ begin
 
         end if;
     end process;
+
+    row_interpolation_u : hp_row_interpolator
+    port map (lineA, row_s);
+
+    col_interpolation_u : hp_col_interpolator
+    port map (lineA, lineB, lineC, lineD, lineE, lineF, col_s);
+
+    diag_interpolation_u : hp_diag_interpolator
+    port map (col_reg, diag_s);
 
 
 end hp_interpolator;

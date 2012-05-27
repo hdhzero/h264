@@ -13,7 +13,8 @@ int main() {
         printf("        c => lineC_i(%i downto %i),\n", i + 7, i);
         printf("        d => lineD_i(%i downto %i),\n", i + 7, i);
         printf("        e => lineE_i(%i downto %i),\n", i + 7, i);
-        printf("        f => lineF_i(%i downto %i)\n", i + 7, i);
+        printf("        f => lineF_i(%i downto %i),\n", i + 7, i);
+        printf("        s => dout_o(%i downto %i)\n", i + 7, i);
         printf("    );\n\n");
 
         ++k;

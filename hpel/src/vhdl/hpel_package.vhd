@@ -62,4 +62,41 @@ package hpel_package is
     );
     end component hp_interpolator;
 
+    component hp_macroblock_buffer is
+    port (  
+        clock_i     : in std_logic;
+        pel_wren_i  : in std_logic;
+        ref_wren_i  : in std_logic;
+        col_wren_i  : in std_logic;
+        row_wren_i  : in std_logic;
+        diag_wren_i : in std_logic;
+        pel_addr_i  : in std_logic_vector(2 downto 0);
+        ref_addr_i  : in std_logic_vector(3 downto 0);
+        col_addr_i  : in std_logic_vector(3 downto 0);
+        row_addr_i  : in std_logic_vector(3 downto 0);
+        diag_addr_i : in std_logic_vector(3 downto 0);
+        pel_din_i   : in std_logic_vector(63 downto 0);
+        ref_din_i   : in std_logic_vector(79 downto 0);
+        col_din_i   : in std_logic_vector(79 downto 0);
+        row_din_i   : in std_logic_vector(71 downto 0);
+        diag_din_i  : in std_logic_vector(71 downto 0);
+        pel_dout_o  : out std_logic_vector(63 downto 0);
+        ref_dout_o  : out std_logic_vector(79 downto 0);
+        col_dout_o  : out std_logic_vector(79 downto 0);
+        row_dout_o  : out std_logic_vector(71 downto 0);
+        diag_dout_o : out std_logic_vector(71 downto 0)
+    );
+    end component hp_macroblock_buffer;
+
+    component hpel is
+    port (
+        clock_i : in std_logic;
+        reset_i : in std_logic;
+        start_i : in std_logic;
+        ref_i   : in std_logic_vector(111 downto 0);
+        pel_i   : in std_logic_vector(63 downto 0);
+        done_o  : out std_logic
+    );
+    end component hpel;
+
 end hpel_package;

@@ -19,7 +19,7 @@ architecture hp_memory of hp_memory is
 begin
     process(clock_i, wren_i, din_i, addr_i)
     begin
-        if clock_i'event and clock = '1' then
+        if clock_i'event and clock_i = '1' then
             if wren_i = '1' then
                 mem(to_integer(unsigned(addr_i))) <= din_i;
             end if;
