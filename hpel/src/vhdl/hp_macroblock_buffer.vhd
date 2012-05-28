@@ -21,7 +21,7 @@ architecture hp_macroblock_buffer of hp_macroblock_buffer is
     signal pel_mem  : pel_ram_t;
     signal ref_mem  : ref_ram_t;
     signal col_mem  : col_ram_t;
-    signal row_mem  : row_ram_t.
+    signal row_mem  : row_ram_t;
     signal diag_mem : diag_ram_t;
 
     signal pel_dout  : std_logic_vector(63 downto 0);

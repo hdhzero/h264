@@ -158,7 +158,7 @@ package hpel_package is
     ---------------------
 
     type hp_interpolator_i is record
-        line : std_logic_vector(111 downto 0);
+        input : std_logic_vector(111 downto 0);
     end record;
 
     type hp_interpolator_o is record
@@ -169,9 +169,10 @@ package hpel_package is
 
     component hp_interpolator is
     port (
-        clock_i : in std_logic;
-        reset_i : in std_logic;
-        din_i   : in std_logic_vector(111 downto 0);
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in hp_interpolator_i;
+        dout  : out hp_interpolator_o
     );
     end component hp_interpolator;
 
