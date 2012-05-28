@@ -11,7 +11,7 @@ int main() {
 
     Frame f(176, 144);
     f.set_from_yuv420_file(file);
-    f.gen_hp_macroblock_test(50, 50);
+    f.gen_test(50, 50);
 
     return 0;
 }

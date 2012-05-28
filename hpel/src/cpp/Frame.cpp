@@ -314,19 +314,151 @@ void Frame::save_macroblock_as_PPM(int i0, int j0, int i1, int j1, char* filenam
 }
 
 //test functions
-void Frame::gen_hp_macroblock_test(int i0, int j0) {
+void Frame::gen_test(int i0, int j0) {
     int i;
     int j;
-    int ii = (i0 + 2) * 2 + 2;
-    int jj = (j0 + 2) * 2 + 2;
-    int ie = (i0 + 11) * 2 + 2;
-    int je = (j0 + 11) * 2 + 2;
+    int k;
+    int i1;
+    int j1;
+    int i2;
+    int j2;
+    unsigned char c;
+    bool flag;
 
-    save_macroblock_as_PPM(i0, j0, i0 + 14, j0 + 14, "hp_ppm_test.ppm");
-    save_macroblock(i0, j0, i0 + 14, j0 + 14, "hp_bin_test.txt");
-    save_macroblockHEX(i0, j0, i0 + 14, j0 + 14, "hp_hex_test.txt");
+    FILE* file_bin;
+    FILE* file_hex;
+
+    FILE* hp_bin     = fopen("hp_bin.txt", "w");
+    FILE* hp_hex     = fopen("hp_hex.txt", "w");
+    FILE* qp_bin     = fopen("qp_bin.txt", "w");
+    FILE* qp_hex     = fopen("qp_hex.txt", "w");
+    FILE* hp_rowHEX  = fopen("hp_rowHEX.txt", "w");
+    FILE* hp_colHEX  = fopen("hp_colHEX.txt", "w");
+    FILE* hp_diagHEX = fopen("hp_diagHEX.txt", "w");
+    FILE* hp_rowBIN  = fopen("hp_rowBIN.txt", "w");
+    FILE* hp_colBIN  = fopen("hp_colBIN.txt", "w");
+    FILE* hp_diagBIN = fopen("hp_diagBIN.txt", "w");
+
+    flag = hp_bin == NULL;
+    flag = flag || hp_hex == NULL;
+    flag = flag || qp_bin == NULL;
+    flag = flag || qp_hex == NULL;
+    flag = flag || hp_rowHEX == NULL;
+    flag = flag || hp_colHEX == NULL;
+    flag = flag || hp_diagHEX == NULL;
+    flag = flag || hp_rowBIN == NULL;
+    flag = flag || hp_colBIN == NULL;
+    flag = flag || hp_diagBIN == NULL;
+
+    if (flag) {
+        printf("Erro ao abrir os arquivos para escrita\n");
+        return;
+    }
+
+    for (i = i0; i < i0 + 14; ++i) {
+        for (j = j0; j < j0 + 14; ++j) {
+            c = get_luma(i, j);
+
+            for (k = 7; k >= 0; --k) {
+                if (c & (1 << k)) {
+                    fprintf(hp_bin, "1");
+                }
+                else {
+                    fprintf(hp_bin, "0");
+                }
+            }
+
+            if (c < 10) {
+                fprintf(hp_hex, "0%X", (unsigned int) c);
+            }
+            else {
+                fprintf(hp_hex, "%X", (unsigned int) c);
+            }
+        }
+
+        fprintf(hp_bin, "\n");
+        fprintf(hp_hex, "\n");
+    }
+
     hp_interpolation();
-    save_rcdHEX(ii, jj, ie, je);
+    i1 = (i0 + 2) * 2 + 1;
+    j1 = (j0 + 2) * 2 + 1;
+    i2 = (i0 + 11) * 2 + 1;
+    j2 = (j0 + 11) * 2 + 1;
+
+    for (i = i1; i <= i2; ++i) {
+        for (j = j1; j <= j2; ++j) {
+            c = get_luma(i, j);
+
+            if (i % 2 == 0 && j % 2 == 0) {
+                file_hex = hp_diagHEX;
+                file_bin = hp_diagBIN;
+            }
+            else if (i % 2 != 0 && j % 2 == 0) {
+                file_hex = hp_rowHEX;
+                file_bin = hp_rowBIN;
+            }
+            else if (i % 2 == 0 && j % 2 != 0) {
+                file_hex = hp_colHEX;
+                file_bin = hp_colBIN;
+            }
+            else {
+                file_hex = NULL;
+                file_bin = NULL;
+            }
+
+            for (k = 7; file_bin != NULL && k >= 0; --k) {
+                if (c & (1 << k))
+                    fprintf(file_bin, "1");
+                else
+                    fprintf(file_bin, "0");
+            }
+            
+            if (file_hex != NULL) {
+                if (c < 10)
+                    fprintf(file_hex, "0%X", (unsigned int) c);
+                else
+                    fprintf(file_hex, "%X", (unsigned int) c);
+            }
+
+            for (k = 7; k >= 0; --k) {
+                if (c & (1 << k))
+                    fprintf(qp_bin, "1");
+                else
+                    fprintf(qp_bin, "0");
+            }
+            
+            if (c < 10)
+                fprintf(qp_hex, "0%X", (unsigned int) c);
+            else
+                fprintf(qp_hex, "%X", (unsigned int) c);
+        }
+
+        fprintf(qp_bin, "\n");
+        fprintf(qp_hex, "\n");
+
+        if (i % 2 == 0) {
+            fprintf(hp_colHEX, "\n");
+            fprintf(hp_diagHEX, "\n");
+            fprintf(hp_colBIN, "\n");
+            fprintf(hp_diagBIN, "\n");
+        }
+        else {
+            fprintf(hp_rowHEX, "\n");
+            fprintf(hp_rowBIN, "\n");
+        }
+    }
+
+    fclose(hp_bin);
+    fclose(hp_hex);
+    fclose(qp_bin);
+    fclose(qp_hex);
+    fclose(hp_rowHEX);
+    fclose(hp_colHEX);
+    fclose(hp_diagHEX);
+    fclose(hp_rowBIN);
+    fclose(hp_colBIN);
+    fclose(hp_diagBIN);
 }
 
 
