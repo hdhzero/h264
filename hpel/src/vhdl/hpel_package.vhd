@@ -58,11 +58,11 @@ package hpel_package is
 
     component hp_memory is
     port (
-        clock_i : in std_logic;
-        wren_i  : in std_logic;
-        addr_i  : in std_logic_vector;
-        din_i   : in std_logic_vector;
-        dout_o  : out std_logic_vector
+        clock : in std_logic;
+        wren  : in std_logic;
+        addr  : in std_logic_vector;
+        din   : in std_logic_vector;
+        dout  : out std_logic_vector
     );
     end component hp_memory;
 
@@ -88,8 +88,8 @@ package hpel_package is
 
     component hp_filter is
     port (
-        din_i  : in hp_filter_i;
-        dout_o : out hp_filter_o;
+        din  : in hp_filter_i;
+        dout : out hp_filter_o
     );
     end component hp_filter;
 
