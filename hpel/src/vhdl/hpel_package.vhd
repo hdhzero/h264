@@ -114,8 +114,8 @@ package hpel_package is
 
     component hp_col_interpolator is
     port (
-        din  : hp_col_interpolator_i;
-        dout : hp_col_interpolator_o
+        din  : in hp_col_interpolator_i;
+        dout : out hp_col_interpolator_o
     );
     end component hp_col_interpolator;
 
@@ -146,7 +146,6 @@ package hpel_package is
     --------------------------
     -- hp_diag_interpolator --
     --------------------------
-
     type hp_diag_interpolator_i is record
         lineA : std_logic_vector(111 downto 0);
     end record;
@@ -157,11 +156,10 @@ package hpel_package is
 
     component hp_diag_interpolator is
     port (
-        din : in std_logic_vector(111 downto 0);
-        dout  : out std_logic_vector(71 downto 0)
+        din  : in hp_diag_interpolator_i;
+        dout : out hp_diag_interpolator_o
     );
     end component hp_diag_interpolator;
-
 
 
 
