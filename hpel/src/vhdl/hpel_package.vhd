@@ -3,6 +3,59 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 package hpel_package is
+
+    -- tipos relacionados com memoria
+    type hp_pel_mem_i is record
+        wren : std_logic;
+        addr : std_logic_vector(2 downto 0);
+        din  : std_logic_vector(63 downto 0);
+    end record;
+
+    type hp_pel_mem_o is record
+        dout : std_logic_vector(63 downto 0);
+    end record;
+
+    type hp_ref_mem_i is record
+        wren : std_logic;
+        addr : std_logic_vector(3 downto 0);
+        din  : std_logic_vector(79 downto 0);
+    end record;
+
+    type hp_ref_mem_o is record
+        dout : std_logic_vector(79 downto 0);
+    end record;
+
+    type hp_col_mem_i is record
+        wren : std_logic;
+        addr : std_logic_vector(3 downto 0);
+        din  : std_logic_vector(79 downto 0);
+    end record;
+
+    type hp_col_mem_o is record
+        dout : std_logic_vector(79 downto 0);
+    end record;
+
+    type hp_row_mem_i is record
+        wren : std_logic;
+        addr : std_logic_vector(3 downto 0);
+        din  : std_logic_vector(71 downto 0);
+    end record;
+
+    type hp_row_mem_o is record
+        dout : std_logic_vector(71 downto 0);
+    end record;
+
+    type hp_diag_mem_i is record
+        wren : std_logic;
+        addr : std_logic_vector(3 downto 0);
+        din  : std_logic_vector(71 downto 0);
+    end record;
+
+    type hp_diag_mem_o is record
+        dout : std_logic_vector(71 downto 0);
+    end record;
+
+
     component hp_memory is
     port (
         clock_i : in std_logic;
@@ -13,29 +66,73 @@ package hpel_package is
     );
     end component hp_memory;
 
+
+
+
+    ---------------
+    -- hp_filter --
+    ---------------
+
+    type hp_filter_i is record
+        a : std_logic_vector(7 downto 0);
+        b : std_logic_vector(7 downto 0);
+        c : std_logic_vector(7 downto 0);
+        d : std_logic_vector(7 downto 0);
+        e : std_logic_vector(7 downto 0);
+        f : std_logic_vector(7 downto 0);
+    end record;
+
+    type hp_filter_o is record
+        s : std_logic_vector(7 downto 0);
+    end record;
+
     component hp_filter is
     port (
-        a : in std_logic_vector(7 downto 0);
-        b : in std_logic_vector(7 downto 0);
-        c : in std_logic_vector(7 downto 0);
-        d : in std_logic_vector(7 downto 0);
-        e : in std_logic_vector(7 downto 0);
-        f : in std_logic_vector(7 downto 0);
-        s : out std_logic_vector(7 downto 0)
+        din_i  : in hp_filter_i;
+        dout_o : out hp_filter_o;
     );
     end component hp_filter;
 
+
+
+    -------------------------
+    -- hp_col_interpolator --
+    -------------------------
+
+    type hp_col_interpolator_i is record
+        lineA : std_logic_vector(111 downto 0);
+        lineB : std_logic_vector(111 downto 0);
+        lineC : std_logic_vector(111 downto 0);
+        lineD : std_logic_vector(111 downto 0);
+        lineE : std_logic_vector(111 downto 0);
+        lineF : std_logic_vector(111 downto 0);
+    end record;
+
+    type hp_col_interpolator_o is record
+        res : std_logic_vector(111 downto 0);
+    end record;
+
     component hp_col_interpolator is
     port (
-        lineA_i : in std_logic_vector(111 downto 0);
-        lineB_i : in std_logic_vector(111 downto 0);
-        lineC_i : in std_logic_vector(111 downto 0);
-        lineD_i : in std_logic_vector(111 downto 0);
-        lineE_i : in std_logic_vector(111 downto 0);
-        lineF_i : in std_logic_vector(111 downto 0);
-        dout_o  : out std_logic_vector(111 downto 0)
+        din  : hp_col_interpolator_i;
+        dout : hp_col_interpolator_o
     );
     end component hp_col_interpolator;
+
+
+
+
+    ----------------------
+    -- hp_row_interpolator
+    ----------------------
+
+    type hp_row_interpolator_i is record
+        lineA : std_logic_vector(111 downto 0);
+    end record;
+
+    type hp_row_interpolator_o is record
+        res : std_logic_vector(71 downto 0);
+    end record;
 
     component hp_row_interpolator is
     port (
@@ -43,6 +140,8 @@ package hpel_package is
         dout_o  : out std_logic_vector(71 downto 0)
     );
     end component hp_row_interpolator;
+
+
     
     component hp_diag_interpolator is
     port (
@@ -51,51 +150,80 @@ package hpel_package is
     );
     end component hp_diag_interpolator;
 
+
+
+
+    ---------------------
+    -- hp_interpolator --
+    ---------------------
+
+    type hp_interpolator_i is record
+        line : std_logic_vector(111 downto 0);
+    end record;
+
+    type hp_interpolator_o is record
+        col   : std_logic_vector(79 downto 0);
+        row   : std_logic_vector(71 downto 0);
+        diag  : std_logic_vector(71 downto 0);
+    end record;
+
     component hp_interpolator is
     port (
         clock_i : in std_logic;
         reset_i : in std_logic;
         din_i   : in std_logic_vector(111 downto 0);
-        col_o   : out std_logic_vector(79 downto 0);
-        row_o   : out std_logic_vector(71 downto 0);
-        diag_o  : out std_logic_vector(71 downto 0)
     );
     end component hp_interpolator;
 
+    -----------------------
+    -- hp_macroblock_buffer
+    -----------------------
+
+    type hp_macroblock_buffer_i is record
+        pel  : hp_pel_mem_i;
+        ref  : hp_ref_mem_i;
+        row  : hp_row_mem_i;
+        col  : hp_col_mem_i;
+        diag : hp_diag_mem_i;
+    end record;
+
+    type hp_macroblock_buffer_o is record
+        pel  : hp_pel_mem_o;
+        ref  : hp_ref_mem_o;
+        row  : hp_row_mem_o;
+        col  : hp_col_mem_o;
+        diag : hp_diag_mem_o;
+    end record;
+
     component hp_macroblock_buffer is
     port (  
-        clock_i     : in std_logic;
-        pel_wren_i  : in std_logic;
-        ref_wren_i  : in std_logic;
-        col_wren_i  : in std_logic;
-        row_wren_i  : in std_logic;
-        diag_wren_i : in std_logic;
-        pel_addr_i  : in std_logic_vector(2 downto 0);
-        ref_addr_i  : in std_logic_vector(3 downto 0);
-        col_addr_i  : in std_logic_vector(3 downto 0);
-        row_addr_i  : in std_logic_vector(3 downto 0);
-        diag_addr_i : in std_logic_vector(3 downto 0);
-        pel_din_i   : in std_logic_vector(63 downto 0);
-        ref_din_i   : in std_logic_vector(79 downto 0);
-        col_din_i   : in std_logic_vector(79 downto 0);
-        row_din_i   : in std_logic_vector(71 downto 0);
-        diag_din_i  : in std_logic_vector(71 downto 0);
-        pel_dout_o  : out std_logic_vector(63 downto 0);
-        ref_dout_o  : out std_logic_vector(79 downto 0);
-        col_dout_o  : out std_logic_vector(79 downto 0);
-        row_dout_o  : out std_logic_vector(71 downto 0);
-        diag_dout_o : out std_logic_vector(71 downto 0)
+        clock : in std_logic;
+        din   : in hp_macroblock_buffer_i;
+        dout  : out hp_macroblock_buffer_o
     );
     end component hp_macroblock_buffer;
 
+
+
+
+    ----------
+    -- hpel --
+    ----------
+
+    type hpel_i is record
+        start : std_logic;
+    end record;
+
+    type hpel_o is record
+        done : std_logic;
+    end record;
+
     component hpel is
     port (
-        clock_i : in std_logic;
-        reset_i : in std_logic;
-        start_i : in std_logic;
-        ref_i   : in std_logic_vector(111 downto 0);
-        pel_i   : in std_logic_vector(63 downto 0);
-        done_o  : out std_logic
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in hpel_i;
+        dout  : out hpel_o
     );
     end component hpel;
 
