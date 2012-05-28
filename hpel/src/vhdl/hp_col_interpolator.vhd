@@ -167,5 +167,4 @@ begin
         dout.s => dout.res(111 downto 104)
     );
 
-
 end hp_col_interpolator;
