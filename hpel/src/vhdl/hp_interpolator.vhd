@@ -42,8 +42,12 @@ begin
     col_din.lineE <= lineE;
     col_din.lineF <= lineF;
 
-    col_re
+    row_din.lineA  <= lineA;
+    diag_din.lineA <= col_reg;
 
+    col_s  <= col_dout.res;
+    row_s  <= row_dout.res;
+    diag_s <= diag_dout.res;
 
     process(clock, reset, din, col_s, row_s, diag_s)
     begin
@@ -75,14 +79,12 @@ begin
     end process;
 
     row_interpolation_u : hp_row_interpolator
-    port map ();
+    port map (row_din, row_dout);
 
     col_interpolation_u : hp_col_interpolator
-    port map ();
+    port map (col_din, col_dout);
 
     diag_interpolation_u : hp_diag_interpolator
-    port map ();
-
-
+    port map (diag_din, diag_dout);
 end hp_interpolator;
 
