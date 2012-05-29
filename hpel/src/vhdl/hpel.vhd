@@ -18,8 +18,23 @@ architecture hpel of hpel is
 
     signal hp_interpolator_din  : hp_interpolator_i;
     signal hp_interpolator_dout : hp_interpolator_o;
+
+    signal hp_control_din  : hp_control_i;
+    signal hp_control_dout : hp_control_o;
 begin
     dout.done <= din.start;
+
+    hp_interpolator_din.input <= din.mb_ref;
+
+    mb_buffer_din.pel.
+
+    hp_control_u : hp_control
+    port map (
+        clock => clock,
+        reset => reset,
+        din   => hp_control_din,
+        dout  => hp_control_dout
+    );
 
     hp_macroblock_buffer_u : hp_macroblock_buffer
     port map (

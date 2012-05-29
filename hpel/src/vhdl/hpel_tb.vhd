@@ -36,7 +36,7 @@ begin
         file_open(inputFile, "interpolator_tb.txt", READ_MODE);
 
         reset <= '1';
-        ref <= (others => '0');
+        hpel_din.mb_ref <= (others => '0');
         start <= '0';
         wait for 20 ns;
         reset <= '0';
@@ -53,7 +53,7 @@ begin
             readline(inputFile, file_line);
             read(file_line, str);
 
-            ref <= str2vec(str);
+            hpel_din.mb_ref <= str2vec(str);
             wait until clock'event and clock = '1';
         end loop;
 

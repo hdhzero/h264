@@ -19,15 +19,26 @@ architecture hp_filter of hp_filter is
     signal c2e4 : signed(15 downto 0);
     signal res  : signed(15 downto 0);
     signal ress : signed(15 downto 0);
+    signal d16  : signed(15 downto 0);
 begin
+    d16  <= x"0010";
+
     af   <= signed("00000000" & din.a) + signed("00000000" & din.f);
     be   <= signed("00000000" & din.b) + signed("00000000" & din.e);
     cd   <= signed("00000000" & din.c) + signed("00000000" & din.d);
     cd4  <= cd(13 downto 0) & "00";
     c2e  <= cd4 - be;
     c2e4 <= c2e(13 downto 0) & "00";
-    res  <= af + c2e4 + c2e;
-    ress <= "00000" & res(15 downto 5);
+    res  <= af + c2e4 + c2e + d16;
+
+    process(res)
+    begin
+        if res(15) = '1' then
+            ress <= "11111" & res(15 downto 5);
+        else
+            ress <= "00000" & res(15 downto 5);
+        end if;
+    end process;
 
     process(ress)
     begin

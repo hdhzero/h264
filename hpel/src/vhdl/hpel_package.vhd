@@ -214,6 +214,26 @@ package hpel_package is
     );
     end component hp_macroblock_buffer;
 
+    ---------------
+    -- hp_control --
+    ----------------
+
+    type hp_control_i is record
+        start : std_logic;
+    end record;
+
+    type hp_control_o is record
+        done : std_logic;
+    end record;
+
+    component hp_control is
+    port (
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in hp_control_i;
+        dout  : out hp_control_o
+    );
+    end component hp_control;
 
 
 
@@ -222,12 +242,15 @@ package hpel_package is
     ----------
 
     type hpel_i is record
-        start : std_logic;
+        start  : std_logic;
+        mb_ref : std_logic_vector(111 downto 0);
+        mb_pel : std_logic_vector(63 downto 0);
     end record;
 
     type hpel_o is record
         done : std_logic;
     end record;
+
 
     component hpel is
     port (
