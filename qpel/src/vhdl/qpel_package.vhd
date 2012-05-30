@@ -32,6 +32,27 @@ package qpel_package is
     );
     end component qp_filter;
 
+    ----------------
+    -- qp_col_mux --
+    ----------------
+
+    type qp_col_mux_i is record
+        sel : std_logic_vector(2 downto 0);
+        i   : std_logic_vector(135 downto 0);
+    end record;
+
+    type qp_col_mux_o is record
+        o : out std_logic_vector(63 downto 0);
+    end record;
+
+    component qp_col_mux is
+    port (
+        din  : in qp_col_mux_i;
+        dout : out qp_col_mux_o
+    );
+    end component;    
+
+
     -------------------------
     -- qp_row_interpolator --
     -------------------------
@@ -71,14 +92,28 @@ package qpel_package is
     );
     end component qp_col_interpolator;
 
-    component diag_interpolator is
+
+    --------------------------
+    -- qp_diag_interpolator --
+    --------------------------
+
+    type qp_diag_interpolator_i is record
+        sel : std_logic;
+        a   : std_logic_vector(151 downto 0);
+        b   : std_logic_vector(151 downto 0);
+    end record;
+
+    type qp_diag_interpolator_o is record
+        s : std_logic_vector(143 downto 0);
+    end record;
+
+    component qp_diag_interpolator is
     port (
-        sel : in std_logic;
-        a : in std_logic_vector(151 downto 0);
-        b : in std_logic_vector(151 downto 0);
-        s : out std_logic_vector(143 downto 0)
+        din  : in qp_diag_interpolator_i;
+        dout : out qp_diag_interpolator_o
     );
-    end component diag_interpolator;
+    end component qp_diag_interpolator;
+
 
     component interpolator is
     port (
