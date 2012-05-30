@@ -12,28 +12,64 @@ package qpel_package is
     );
     end component memory;
 
-    component filter is
-    port (
-        a : in std_logic_vector(7 downto 0);
-        b : in std_logic_vector(7 downto 0);
-        s : out std_logic_vector(7 downto 0)
-    );
-    end component filter;
+    ---------------
+    -- qp_filter --
+    ---------------
 
-    component row_interpolator is
-    port (
-        a : in std_logic_vector(151 downto 0);
-        s : out std_logic_vector(143 downto 0)
-    );
-    end component row_interpolator;
+    type qp_filter_i is record
+        a : std_logic_vector(7 downto 0);
+        b : std_logic_vector(7 downto 0);
+    end record;
 
-    component col_interpolator is
+    type qp_filter_o is record
+        s : std_logic_vector;
+    end record;
+
+    component qp_filter is
     port (
-        a : in std_logic_vector(135 downto 0);
-        b : in std_logic_vector(135 downto 0);
-        s : out std_logic_vector(135 downto 0)
+        din  : in qp_filter_i;
+        dout : out qp_filter_o
     );
-    end component col_interpolator;
+    end component qp_filter;
+
+    -------------------------
+    -- qp_row_interpolator --
+    -------------------------
+
+    type qp_row_interpolator_i is record
+        a : std_logic_vector(151 downto 0)
+    end record;
+
+    type qp_row_interpolator_o is record
+        s : std_logic_vector(143 downto 0);
+    end record;
+
+    component qp_row_interpolator is
+    port (
+        din  : in qp_row_interpolator_i;
+        dout : out qp_row_interpolator_o
+    );
+    end component qp_row_interpolator;
+
+    -------------------------
+    -- qp_col_interpolator --
+    -------------------------
+
+    type qp_col_interpolator_i is record
+        a : std_logic_vector(135 downto 0);
+        b : std_logic_vector(135 downto 0);
+    end record;
+
+    type qp_col_interpolator_o is record
+        s : std_logic_vector(135 downto 0);
+    end record;
+
+    component qp_col_interpolator is
+    port (
+        din  : qp_col_interpolator_i;
+        dout : qp_col_interpolator_o
+    );
+    end component qp_col_interpolator;
 
     component diag_interpolator is
     port (
