@@ -41,6 +41,10 @@ begin
 --        diag_dout_o => diag_dout_w
 --    );
 
+    qp_interpolator_din.i <= din.hp_mb_i;
+    qp_control_din.start <= din.start;
+    qp_interpolator_din.sel <= qp_control_dout.sel;
+
     qp_control_u : qp_control
     port map (
         clock => clock,
