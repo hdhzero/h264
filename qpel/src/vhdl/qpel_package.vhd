@@ -22,7 +22,7 @@ package qpel_package is
     end record;
 
     type qp_filter_o is record
-        s : std_logic_vector;
+        s : std_logic_vector(7 downto 0);
     end record;
 
     component qp_filter is
@@ -42,7 +42,7 @@ package qpel_package is
     end record;
 
     type qp_col_mux_o is record
-        o : out std_logic_vector(63 downto 0);
+        o : std_logic_vector(63 downto 0);
     end record;
 
     component qp_col_mux is
@@ -58,7 +58,7 @@ package qpel_package is
     -------------------------
 
     type qp_row_interpolator_i is record
-        a : std_logic_vector(151 downto 0)
+        a : std_logic_vector(151 downto 0);
     end record;
 
     type qp_row_interpolator_o is record
@@ -87,8 +87,8 @@ package qpel_package is
 
     component qp_col_interpolator is
     port (
-        din  : qp_col_interpolator_i;
-        dout : qp_col_interpolator_o
+        din  : in qp_col_interpolator_i;
+        dout : out qp_col_interpolator_o
     );
     end component qp_col_interpolator;
 
@@ -115,39 +115,81 @@ package qpel_package is
     end component qp_diag_interpolator;
 
 
-    component interpolator is
+    ---------------------
+    -- qp_interpolator --
+    ---------------------
+
+    type qp_interpolator_i is record
+        i   : std_logic_vector(151 downto 0);
+        sel : std_logic;
+
+    end record;
+
+    type qp_interpolator_o is record
+        col  : std_logic_vector(135 downto 0);
+        row  : std_logic_vector(143 downto 0);
+        diag : std_logic_vector(143 downto 0);
+    end record;
+
+    component qp_interpolator is
     port (
-        clock_i : in std_logic;
-        reset_i : in std_logic;
-        din_i   : in std_logic_vector(151 downto 0);
-        sel_i   : in std_logic;
-        col_o   : out std_logic_vector(135 downto 0);
-        row_o   : out std_logic_vector(143 downto 0);
-        diag_o  : out std_logic_vector(143 downto 0)
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in qp_interpolator_i;
+        dout  : out qp_interpolator_o
     );
-    end component interpolator;
+    end component qp_interpolator;
 
 
-    component control is
+    ----------------
+    -- qp_control --
+    ----------------
+
+    type qp_pel_mem_ctrl_i is record
+        wren : std_logic;
+        addr : std_logic_vector(2 downto 0);
+    end record;
+
+    type qp_pel_mem_data_i is record
+        din : std_logic_vector(63 downto 0);
+    end record;
+
+    type qp_col_mem_ctrl_i is record
+        wren : std_logic;
+        addr : std_logic_vector(4 downto 0);
+    end record;
+
+    type qp_row_mem_ctrl_i is record
+        wren : std_logic;
+        addr : std_logic_vector(4 downto 0);
+    end record;
+
+    type qp_diag_mem_ctrl_i is record
+        wren : std_logic;
+        addr : std_logic_vector(4 downto 0);
+    end record;
+
+    type qp_control_i is record
+        start : std_logic;        
+    end record;
+
+    type qp_control_o is record
+        pel  : qp_pel_mem_ctrl_i;
+        row  : qp_row_mem_ctrl_i;
+        col  : qp_col_mem_ctrl_i;
+        diag : qp_diag_mem_ctrl_i;
+        sel  : std_logic;
+        done : std_logic;
+    end record;
+
+    component qp_control is
     port (
-        clock_i : in std_logic;
-        reset_i : in std_logic;
-        start_i : in std_logic;
-
-        pel_wren_o  : out std_logic;
-        col_wren_o  : out std_logic;
-        row_wren_o  : out std_logic;
-        diag_wren_o : out std_logic;
-
-        pel_addr_o  : out std_logic_vector(2 downto 0);
-        col_addr_o  : out std_logic_vector(4 downto 0);
-        row_addr_o  : out std_logic_vector(4 downto 0);
-        diag_addr_o : out std_logic_vector(4 downto 0);
-
-        diag_int_sel_o : out std_logic;
-        done_o : out std_logic
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in qp_control_i;
+        dout  : out qp_control_o
     );
-    end component control;
+    end component qp_control;
 
     component macroblock_buffer is
     port (  
@@ -172,17 +214,26 @@ package qpel_package is
     end component macroblock_buffer;
 
 
+    ----------
+    -- qpel --
+    ----------
+
+    type qpel_i is record
+        start : std_logic;
+        hp_mb_i : std_logic_vector(151 downto 0);
+    end record;
+
+    type qpel_o is record
+        done : std_logic;
+    end record;
+
     component qpel is
     port (
-        clock_i : in std_logic;
-        reset_i : in std_logic;
-        start_i : in std_logic;
-
-        hp_mb_i : in std_logic_vector(151 downto 0);
-        done_o  : out std_logic        
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in qpel_i;
+        dout  : out qpel_o
     );
     end component qpel;
-
-
 end qpel_package;
 

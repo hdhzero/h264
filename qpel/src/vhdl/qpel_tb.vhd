@@ -13,8 +13,8 @@ architecture qpel_tb of qpel_tb is
     signal reset_i : std_logic;
     signal start_i : std_logic;
 
-    signal hp_mb_i : std_logic_vector(151 downto 0);
-    signal done_o  : std_logic; 
+    signal qpel_din  : qpel_i;
+    signal qpel_dout : qpel_o;
 begin
     process
     begin
@@ -32,8 +32,8 @@ begin
         file_open(inputFile, "interpolator_tb.txt", READ_MODE);
 
         reset_i <= '1';
-        hp_mb_i <= (others => '0');
-        start_i <= '0';
+        qpel_din.hp_mb_i <= (others => '0');
+        qpel_din.start <= '0';
         wait for 20 ns;
         reset_i <= '0';
 
@@ -41,15 +41,15 @@ begin
         wait until clock_i'event and clock_i = '1';
         wait until clock_i'event and clock_i = '1';
 
-        start_i <= '1';
+        qpel_din.start <= '1';
         wait until clock_i'event and clock_i = '1';
-        start_i <= '0';
+        qpel_din.start <= '0';
 
         while not endfile(inputFile) loop
             readline(inputFile, file_line);
             read(file_line, str);
 
-            hp_mb_i <= str2vec(str);
+            qpel_din.hp_mb_i <= str2vec(str);
             wait until clock_i'event and clock_i = '1';
         end loop;
 
@@ -60,10 +60,9 @@ begin
 
     qpel_u : qpel
     port map (
-        clock_i => clock_i,
-        reset_i => reset_i,
-        start_i => start_i,
-        hp_mb_i => hp_mb_i,
-        done_o  => done_o
+        clock => clock_i,
+        reset => reset_i,
+        din   => qpel_din,
+        dout  => qpel_dout
     );
 end qpel_tb;

@@ -16,7 +16,7 @@ architecture qp_diag_interpolator of qp_diag_interpolator is
 begin
     process(din.a, din.b, din.sel)
     begin
-        case sel is
+        case din.sel is
             when '0' =>
                 s0(7 downto 0) <= din.a(7 downto 0);
                 s1(7 downto 0) <= din.b(15 downto 8);
@@ -95,57 +95,57 @@ begin
     end process;
 
     fir_00 : qp_filter
-    port map (s0(7 downto 0), s1(7 downto 0), dout.s(7 downto 0));
+    port map (din.a => s0(7 downto 0), din.b => s1(7 downto 0), dout.s => dout.s(7 downto 0));
 
     fir_01 : qp_filter
-    port map (s0(15 downto 8), s1(15 downto 8), dout.s(15 downto 8));
+    port map (din.a => s0(15 downto 8), din.b => s1(15 downto 8), dout.s => dout.s(15 downto 8));
 
     fir_02 : qp_filter
-    port map (s0(23 downto 16), s1(23 downto 16), dout.s(23 downto 16));
+    port map (din.a => s0(23 downto 16), din.b => s1(23 downto 16), dout.s => dout.s(23 downto 16));
 
     fir_03 : qp_filter
-    port map (s0(31 downto 24), s1(31 downto 24), dout.s(31 downto 24));
+    port map (din.a => s0(31 downto 24), din.b => s1(31 downto 24), dout.s => dout.s(31 downto 24));
 
     fir_04 : qp_filter
-    port map (s0(39 downto 32), s1(39 downto 32), dout.s(39 downto 32));
+    port map (din.a => s0(39 downto 32), din.b => s1(39 downto 32), dout.s => dout.s(39 downto 32));
 
     fir_05 : qp_filter
-    port map (s0(47 downto 40), s1(47 downto 40), dout.s(47 downto 40));
+    port map (din.a => s0(47 downto 40), din.b => s1(47 downto 40), dout.s => dout.s(47 downto 40));
 
     fir_06 : qp_filter
-    port map (s0(55 downto 48), s1(55 downto 48), dout.s(55 downto 48));
+    port map (din.a => s0(55 downto 48), din.b => s1(55 downto 48), dout.s => dout.s(55 downto 48));
 
     fir_07 : qp_filter
-    port map (s0(63 downto 56), s1(63 downto 56), dout.s(63 downto 56));
+    port map (din.a => s0(63 downto 56), din.b => s1(63 downto 56), dout.s => dout.s(63 downto 56));
 
     fir_08 : qp_filter
-    port map (s0(71 downto 64), s1(71 downto 64), dout.s(71 downto 64));
+    port map (din.a => s0(71 downto 64), din.b => s1(71 downto 64), dout.s => dout.s(71 downto 64));
 
     fir_09 : qp_filter
-    port map (s0(79 downto 72), s1(79 downto 72), dout.s(79 downto 72));
+    port map (din.a => s0(79 downto 72), din.b => s1(79 downto 72), dout.s => dout.s(79 downto 72));
 
     fir_10 : qp_filter
-    port map (s0(87 downto 80), s1(87 downto 80), dout.s(87 downto 80));
+    port map (din.a => s0(87 downto 80), din.b => s1(87 downto 80), dout.s => dout.s(87 downto 80));
 
     fir_11 : qp_filter
-    port map (s0(95 downto 88), s1(95 downto 88), dout.s(95 downto 88));
+    port map (din.a => s0(95 downto 88), din.b => s1(95 downto 88), dout.s => dout.s(95 downto 88));
 
     fir_12 : qp_filter
-    port map (s0(103 downto 96), s1(103 downto 96), dout.s(103 downto 96));
+    port map (din.a => s0(103 downto 96), din.b => s1(103 downto 96), dout.s => dout.s(103 downto 96));
 
     fir_13 : qp_filter
-    port map (s0(111 downto 104), s1(111 downto 104), dout.s(111 downto 104));
+    port map (din.a => s0(111 downto 104), din.b => s1(111 downto 104), dout.s => dout.s(111 downto 104));
 
     fir_14 : qp_filter
-    port map (s0(119 downto 112), s1(119 downto 112), dout.s(119 downto 112));
+    port map (din.a => s0(119 downto 112), din.b => s1(119 downto 112), dout.s => dout.s(119 downto 112));
 
     fir_15 : qp_filter
-    port map (s0(127 downto 120), s1(127 downto 120), dout.s(127 downto 120));
+    port map (din.a => s0(127 downto 120), din.b => s1(127 downto 120), dout.s => dout.s(127 downto 120));
 
     fir_16 : qp_filter
-    port map (s0(135 downto 128), s1(135 downto 128), dout.s(135 downto 128));
+    port map (din.a => s0(135 downto 128), din.b => s1(135 downto 128), dout.s => dout.s(135 downto 128));
 
     fir_17 : qp_filter
-    port map (s0(143 downto 136), s1(143 downto 136), dout.s(143 downto 136));
+    port map (din.a => s0(143 downto 136), din.b => s1(143 downto 136), dout.s => dout.s(143 downto 136));
 
 end qp_diag_interpolator;

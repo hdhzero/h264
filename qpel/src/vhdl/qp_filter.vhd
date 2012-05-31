@@ -10,7 +10,7 @@ entity qp_filter is
     );
 end qp_filter;
 
-architecture qp_filter of _qpfilter is
+architecture qp_filter of qp_filter is
     signal sum : unsigned(8 downto 0);
 begin
     sum    <= unsigned('0' & din.a) + unsigned('0' & din.b) + "1";
