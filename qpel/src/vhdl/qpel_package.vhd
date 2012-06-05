@@ -191,27 +191,80 @@ package qpel_package is
     );
     end component qp_control;
 
-    component macroblock_buffer is
+    type pel_ram_i is record
+        wren : std_logic;
+        addr : std_logic_vector(2 downto 0);
+        din  : std_logic_vector(63 downto 0);
+    end record;
+
+    type row_ram_i is record
+        wren : std_logic;
+        addr : std_logic_vector(4 downto 0);
+        din  : std_logic_vector(143 downto 0);
+    end record;
+
+    type diag_ram_i is record
+        wren : std_logic;
+        addr : std_logic_vector(4 downto 0);
+        din  : std_logic_vector(143 downto 0);
+    end record;
+
+    type col_ram_i is record
+        wren : std_logic;
+        addr : std_logic_vector(4 downto 0);
+        din  : std_logic_vector(135 downto 0);
+    end record;
+
+    type qp_macroblock_buffer_i is record
+        pel  : pel_ram_i;
+        col  : col_ram_i;
+        row  : row_ram_i;
+        diag : diag_ram_i;
+    end record;
+
+    type qp_macroblock_buffer_o is record
+        col  : std_logic_vector(135 downto 0);
+        row  : std_logic_vector(143 downto 0);
+        diag : std_logic_vector(143 downto 0);
+    end record;
+ 
+    component qp_macroblock_buffer is
     port (  
-        clock_i     : in std_logic;
-        pel_wren_i  : in std_logic;
-        col_wren_i  : in std_logic;
-        row_wren_i  : in std_logic;
-        diag_wren_i : in std_logic;
-        pel_addr_i  : in std_logic_vector(2 downto 0);
-        col_addr_i  : in std_logic_vector(4 downto 0);
-        row_addr_i  : in std_logic_vector(4 downto 0);
-        diag_addr_i : in std_logic_vector(4 downto 0);
-        pel_din_i   : in std_logic_vector(63 downto 0);
-        col_din_i   : in std_logic_vector(135 downto 0);
-        row_din_i   : in std_logic_vector(143 downto 0);
-        diag_din_i  : in std_logic_vector(143 downto 0);
-        pel_dout_o  : out std_logic_vector(63 downto 0);
-        col_dout_o  : out std_logic_vector(135 downto 0);
-        row_dout_o  : out std_logic_vector(143 downto 0);
-        diag_dout_o : out std_logic_vector(143 downto 0)
+        clock : in std_logic;
+        din   : in qp_macroblock_buffer_i;
+        dout  : out qp_macroblock_buffer_o
     );
-    end component macroblock_buffer;
+    end component qp_macroblock_buffer;
+
+
+    ----------------
+    -- qp_compare --
+    ----------------
+    type match_t is record
+        vec_x : std_logic_vector(1 downto 0);
+        vec_y : std_logic_vector(1 downto 0);
+        sad   : std_logic_vector(15 downto 0);
+    end record;
+
+    type qp_compare_i is record
+        hp    : match_t;
+        row   : match_t;
+        col   : match_t;
+        diag  : match_t;
+    end record;
+
+    type qp_compare_o is record
+        result : match_t;
+    end record;
+
+    component qp_compare is
+    port (
+        clock : in std_logic;
+        reset : in std_logic;
+        din   : in qp_compare_i;
+        dout  : out qp_compare_o
+    );
+    end component qp_compare;
 
 
     ----------
