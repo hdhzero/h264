@@ -40,33 +40,43 @@ begin
             r.hpcol   <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
             r.rowdiag <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
         elsif clock'event and clock = '1' then
-            r.hp   <= din.hp;
-            r.row  <= din.row;
-            r.col  <= din.col;
-            r.diag <= din.diag;
-
-            if unsigned(r.hp.sad) < unsigned(r.col.sad) then
-                r.hpcol <= r.hp;
+            if din.clear = '1' then
+                r.best    <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
+                r.hp      <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
+                r.row     <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
+                r.diag    <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
+                r.col     <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
+                r.hpcol   <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
+                r.rowdiag <= (vec_x => "00", vec_y => "00", sad => (others => '1'));
             else
-                r.hpcol <= r.col;
-            end if;
+                r.hp   <= din.hp;
+                r.row  <= din.row;
+                r.col  <= din.col;
+                r.diag <= din.diag;
 
-            if unsigned(r.row.sad) < unsigned(r.diag.sad) then
-                r.rowdiag <= r.row;
-            else
-                r.rowdiag <= r.diag;
-            end if;
+                if unsigned(r.hp.sad) < unsigned(r.col.sad) then
+                    r.hpcol <= r.hp;
+                else
+                    r.hpcol <= r.col;
+                end if;
 
-            if unsigned(r.rowdiag.sad) < unsigned(r.hpcol.sad) then
-                r.tobest <= r.rowdiag;
-            else
-                r.tobest <= r.hpcol;
-            end if;
+                if unsigned(r.row.sad) < unsigned(r.diag.sad) then
+                    r.rowdiag <= r.row;
+                else
+                    r.rowdiag <= r.diag;
+                end if;
 
-            if unsigned(r.tobest.sad) < unsigned(r.best.sad) then
-                r.best <= r.tobest;
-            else
-                r.best <= r.best;
+                if unsigned(r.rowdiag.sad) < unsigned(r.hpcol.sad) then
+                    r.tobest <= r.rowdiag;
+                else
+                    r.tobest <= r.hpcol;
+                end if;
+
+                if unsigned(r.tobest.sad) < unsigned(r.best.sad) then
+                    r.best <= r.tobest;
+                else
+                    r.best <= r.best;
+                end if;
             end if;
         end if;
     end process;

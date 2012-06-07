@@ -247,6 +247,7 @@ package qpel_package is
     end record;
 
     type qp_compare_i is record
+        clear : std_logic;
         hp    : match_t;
         row   : match_t;
         col   : match_t;
@@ -265,6 +266,41 @@ package qpel_package is
         dout  : out qp_compare_o
     );
     end component qp_compare;
+
+    -----------------
+    -- qp_sad_tree --
+    -----------------
+
+    type mb_line_t is record
+        a : std_logic_vector(7 downto 0);
+        b : std_logic_vector(7 downto 0);
+        c : std_logic_vector(7 downto 0);
+        d : std_logic_vector(7 downto 0);
+        e : std_logic_vector(7 downto 0);
+        f : std_logic_vector(7 downto 0);
+        g : std_logic_vector(7 downto 0);
+        h : std_logic_vector(7 downto 0);
+    end record;
+        
+    type qp_sad_tree_i is record
+        clear : std_logic;
+        lineA : mb_line_t;
+        lineB : mb_line_t;
+    end record;
+
+    type qp_sad_tree_o is record
+        res : std_logic_vector(15 downto 0);
+    end record;
+
+    component qp_sad_tree is
+        port (
+            clock : in std_logic;
+            reset : in std_logic;
+        din   : in qp_sad_tree_i;
+        dout  : out qp_sad_tree_o
+    );
+    end component qp_sad_tree;
+
 
 
     ----------
