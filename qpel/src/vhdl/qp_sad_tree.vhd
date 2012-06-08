@@ -33,29 +33,60 @@ architecture qp_sad_tree of qp_sad_tree is
     signal efgh : unsigned(15 downto 0);
     
 begin
-    a <= unsigned(din.lineA.a) - unsigned(din.lineB.a) when unsigned(din.lineA.a) > unsigned(din.lineB.a) else
-         unsigned(din.lineB.a) - unsigned(din.lineA.a);
 
-    b <= unsigned(din.lineA.b) - unsigned(din.lineB.b) when unsigned(din.lineA.b) > unsigned(din.lineB.b) else
-         unsigned(din.lineB.b) - unsigned(din.lineA.b);
+    dout.res <= sad;
 
-    c <= unsigned(din.lineA.c) - unsigned(din.lineB.c) when unsigned(din.lineA.c) > unsigned(din.lineB.c) else
-         unsigned(din.lineB.c) - unsigned(din.lineA.c);
+    process (din)
+    begin
+        if unsigned(din.lineA.a) > unsigned(din.lineB.a) then
+            a <= "00000000" & (unsigned(din.lineA.a) - unsigned(din.lineB.a));
+        else
+            a <= "00000000" & (unsigned(din.lineB.a) - unsigned(din.lineA.a));
+        end if;
 
-    d <= unsigned(din.lineA.d) - unsigned(din.lineB.d) when unsigned(din.lineA.d) > unsigned(din.lineB.d) else
-         unsigned(din.lineB.d) - unsigned(din.lineA.d);
+        if unsigned(din.lineA.b) > unsigned(din.lineB.b) then
+            b <= "00000000" & (unsigned(din.lineA.b) - unsigned(din.lineB.b));
+        else
+            b <= "00000000" & (unsigned(din.lineB.b) - unsigned(din.lineA.b));
+        end if;
 
-    e <= unsigned(din.lineA.e) - unsigned(din.lineB.e) when unsigned(din.lineA.e) > unsigned(din.lineB.e) else
-         unsigned(din.lineB.e) - unsigned(din.lineA.e);
+        if unsigned(din.lineA.c) > unsigned(din.lineB.c) then
+            c <= "00000000" & (unsigned(din.lineA.c) - unsigned(din.lineB.c));
+        else
+            c <= "00000000" & (unsigned(din.lineB.c) - unsigned(din.lineA.c));
+        end if;
 
-    f <= unsigned(din.lineA.f) - unsigned(din.lineB.f) when unsigned(din.lineA.f) > unsigned(din.lineB.f) else
-         unsigned(din.lineB.f) - unsigned(din.lineA.f);
+        if unsigned(din.lineA.d) > unsigned(din.lineB.d) then
+            d <= "00000000" & (unsigned(din.lineA.d) - unsigned(din.lineB.d));
+        else
+            d <= "00000000" & (unsigned(din.lineB.d) - unsigned(din.lineA.d));
+        end if;
 
-    g <= unsigned(din.lineA.g) - unsigned(din.lineB.g) when unsigned(din.lineA.g) > unsigned(din.lineB.g) else
-         unsigned(din.lineB.g) - unsigned(din.lineA.g);
+        if unsigned(din.lineA.e) > unsigned(din.lineB.e) then
+            e <= "00000000" & (unsigned(din.lineA.e) - unsigned(din.lineB.e));
+        else
+            e <= "00000000" & (unsigned(din.lineB.e) - unsigned(din.lineA.e));
+        end if;
 
-    h <= unsigned(din.lineA.h) - unsigned(din.lineB.h) when unsigned(din.lineA.h) > unsigned(din.lineB.h) else
-         unsigned(din.lineB.h) - unsigned(din.lineA.h);
+        if unsigned(din.lineA.f) > unsigned(din.lineB.f) then
+            f <= "00000000" & (unsigned(din.lineA.f) - unsigned(din.lineB.f));
+        else
+            f <= "00000000" & (unsigned(din.lineB.f) - unsigned(din.lineA.f));
+        end if;
+
+        if unsigned(din.lineA.g) > unsigned(din.lineB.g) then
+            g <= "00000000" & (unsigned(din.lineA.g) - unsigned(din.lineB.g));
+        else
+            g <= "00000000" & (unsigned(din.lineB.g) - unsigned(din.lineA.g));
+        end if;
+
+        if unsigned(din.lineA.h) > unsigned(din.lineB.h) then
+            h <= "00000000" & (unsigned(din.lineA.h) - unsigned(din.lineB.h));
+        else
+            h <= "00000000" & (unsigned(din.lineB.h) - unsigned(din.lineA.h));
+        end if;
+
+    end process;
 
     abcd <= ab + cd;
     efgh <= ef + gh;
@@ -74,7 +105,7 @@ begin
             ef <= e + f;
             gh <= g + h;
 
-            sad <= abcd + efgh;
+            sad <= std_logic_vector(abcd + efgh);
         end if;
     end process;
 end qp_sad_tree;

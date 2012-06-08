@@ -284,7 +284,6 @@ package qpel_package is
     end record;
         
     type qp_sad_tree_i is record
-        clear : std_logic;
         lineA : mb_line_t;
         lineB : mb_line_t;
     end record;
@@ -294,9 +293,9 @@ package qpel_package is
     end record;
 
     component qp_sad_tree is
-        port (
-            clock : in std_logic;
-            reset : in std_logic;
+    port (
+        clock : in std_logic;
+        reset : in std_logic;
         din   : in qp_sad_tree_i;
         dout  : out qp_sad_tree_o
     );
