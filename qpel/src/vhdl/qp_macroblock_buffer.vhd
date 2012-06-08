@@ -18,7 +18,6 @@ architecture qp_macroblock_buffer of qp_macroblock_buffer is
     type diag_ram_t is array (0 to 31) of std_logic_vector(143 downto 0);
 
     signal pel_mem  : pel_ram_t;
-    signal ref_mem  : ref_ram_t;
     signal col_mem  : col_ram_t;
     signal row_mem  : row_ram_t;
     signal diag_mem : diag_ram_t;
@@ -29,11 +28,10 @@ architecture qp_macroblock_buffer of qp_macroblock_buffer is
     signal diag_dout : std_logic_vector(143 downto 0);
 begin
 
-    dout.pel.dout  <= pel_dout;
-    dout.ref.dout  <= ref_dout;
-    dout.col.dout  <= col_dout;
-    dout.row.dout  <= row_dout;
-    dout.diag.dout <= diag_dout;
+    dout.pel  <= pel_dout;
+    dout.col  <= col_dout;
+    dout.row  <= row_dout;
+    dout.diag <= diag_dout;
 
     process (clock, din.pel)
     begin
@@ -46,17 +44,6 @@ begin
         end if;
     end process;
         
-    process (clock, din.ref)
-    begin
-        if clock'event and clock = '1' then
-            if din.ref.wren = '1' then
-                ref_mem(to_integer(unsigned(din.ref.addr))) <= din.ref.din;
-            end if;
-
-            ref_dout <= ref_mem(to_integer(unsigned(din.ref.addr)));
-        end if;
-    end process;
-
     process (clock, din.col)
     begin
         if clock'event and clock = '1' then

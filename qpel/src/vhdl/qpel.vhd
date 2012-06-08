@@ -18,28 +18,35 @@ architecture qpel of qpel is
 
     signal qp_interpolator_din  : qp_interpolator_i;
     signal qp_interpolator_dout : qp_interpolator_o;
+
+    signal qp_macroblock_buffer_din  : qp_macroblock_buffer_i;
+    signal qp_macroblock_buffer_dout : qp_macroblock_buffer_o;
 begin
 
---    macroblock_buffer_u : macroblock_buffer
---    port map (
---        clock_i => clock_i,
---        pel_wren_i  => pel_wren_w,
---        col_wren_i  => col_wren_w,
---        row_wren_i  => row_wren_w,
---        diag_wren_i => diag_wren_w,
---        pel_addr_i  => pel_addr_w,
---        col_addr_i  => col_addr_w,
---        row_addr_i  => row_addr_w,
---        diag_addr_i => diag_addr_w,
---        pel_din_i   => pel_din_w,
---        col_din_i   => col_din_w,
---        row_din_i   => row_din_w,
---        diag_din_i  => diag_din_w,
---        pel_dout_o  => pel_dout_w,
---        col_dout_o  => col_dout_w,
---        row_dout_o  => row_dout_w,
---        diag_dout_o => diag_dout_w
---    );
+    qp_macroblock_buffer_din.pel.wren <= qp_control_dout.pel.wren;
+    qp_macroblock_buffer_din.pel.addr <= qp_control_dout.pel.addr;
+    qp_macroblock_buffer_din.pel.din  <= (others => '0');
+    
+    qp_macroblock_buffer_din.col.wren <= qp_control_dout.col.wren;
+    qp_macroblock_buffer_din.col.addr <= qp_control_dout.col.addr;
+    qp_macroblock_buffer_din.col.din  <= qp_interpolator_dout.col;
+
+    qp_macroblock_buffer_din.row.wren <= qp_control_dout.row.wren;
+    qp_macroblock_buffer_din.row.addr <= qp_control_dout.row.addr;
+    qp_macroblock_buffer_din.row.din  <= qp_interpolator_dout.row;
+ 
+    qp_macroblock_buffer_din.diag.wren <= qp_control_dout.diag.wren;
+    qp_macroblock_buffer_din.diag.addr <= qp_control_dout.diag.addr;
+    qp_macroblock_buffer_din.diag.din  <= qp_interpolator_dout.diag;
+
+    qp_macroblock_buffer_u : qp_macroblock_buffer
+    port map (
+        clock => clock,
+        din   => qp_macroblock_buffer_din,
+        dout  => qp_macroblock_buffer_dout
+    );
+
+    
 
     qp_interpolator_din.i <= din.hp_mb_i;
     qp_control_din.start <= din.start;

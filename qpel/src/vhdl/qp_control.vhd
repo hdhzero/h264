@@ -163,7 +163,7 @@ begin
                 nxt.state <= end_interpolation;
 
             when end_interpolation=>
-                nxt.done <= '0';
+                nxt.done <= '1';
                 nxt.sel  <= '0';
                 nxt.cont <= 0;
 

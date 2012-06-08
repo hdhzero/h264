@@ -223,6 +223,7 @@ package qpel_package is
     end record;
 
     type qp_macroblock_buffer_o is record
+        pel  : std_logic_vector(63 downto 0);
         col  : std_logic_vector(135 downto 0);
         row  : std_logic_vector(143 downto 0);
         diag : std_logic_vector(143 downto 0);
