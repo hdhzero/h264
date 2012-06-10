@@ -3,5 +3,5 @@ h264
 
 motion estimation in VHDL
 
-link to yuv sources
+link to some yuv sources
 http://trace.eas.asu.edu/yuv/
