@@ -14,7 +14,7 @@ entity qp_sad_tree is
 end qp_sad_tree;
 
 architecture qp_sad_tree of qp_sad_tree is
-    signal sad : std_logic_vector(15 downto 0);
+    signal sad : unsigned(15 downto 0);
     signal a   : unsigned(15 downto 0);
     signal b   : unsigned(15 downto 0);
     signal c   : unsigned(15 downto 0);
@@ -34,56 +34,56 @@ architecture qp_sad_tree of qp_sad_tree is
     
 begin
 
-    dout.res <= sad;
+    dout.res <= std_logic_vector(sad);
 
     process (din)
     begin
         if unsigned(din.lineA.a) > unsigned(din.lineB.a) then
-            a <= "00000000" & (unsigned(din.lineA.a) - unsigned(din.lineB.a));
+            a <= x"00" & (unsigned(din.lineA.a) - unsigned(din.lineB.a));
         else
-            a <= "00000000" & (unsigned(din.lineB.a) - unsigned(din.lineA.a));
+            a <= x"00" & (unsigned(din.lineB.a) - unsigned(din.lineA.a));
         end if;
 
         if unsigned(din.lineA.b) > unsigned(din.lineB.b) then
-            b <= "00000000" & (unsigned(din.lineA.b) - unsigned(din.lineB.b));
+            b <= x"00" & (unsigned(din.lineA.b) - unsigned(din.lineB.b));
         else
-            b <= "00000000" & (unsigned(din.lineB.b) - unsigned(din.lineA.b));
+            b <= x"00" & (unsigned(din.lineB.b) - unsigned(din.lineA.b));
         end if;
 
         if unsigned(din.lineA.c) > unsigned(din.lineB.c) then
-            c <= "00000000" & (unsigned(din.lineA.c) - unsigned(din.lineB.c));
+            c <= x"00" & (unsigned(din.lineA.c) - unsigned(din.lineB.c));
         else
-            c <= "00000000" & (unsigned(din.lineB.c) - unsigned(din.lineA.c));
+            c <= x"00" & (unsigned(din.lineB.c) - unsigned(din.lineA.c));
         end if;
 
         if unsigned(din.lineA.d) > unsigned(din.lineB.d) then
-            d <= "00000000" & (unsigned(din.lineA.d) - unsigned(din.lineB.d));
+            d <= x"00" & (unsigned(din.lineA.d) - unsigned(din.lineB.d));
         else
-            d <= "00000000" & (unsigned(din.lineB.d) - unsigned(din.lineA.d));
+            d <= x"00" & (unsigned(din.lineB.d) - unsigned(din.lineA.d));
         end if;
 
         if unsigned(din.lineA.e) > unsigned(din.lineB.e) then
-            e <= "00000000" & (unsigned(din.lineA.e) - unsigned(din.lineB.e));
+            e <= x"00" & (unsigned(din.lineA.e) - unsigned(din.lineB.e));
         else
-            e <= "00000000" & (unsigned(din.lineB.e) - unsigned(din.lineA.e));
+            e <= x"00" & (unsigned(din.lineB.e) - unsigned(din.lineA.e));
         end if;
 
         if unsigned(din.lineA.f) > unsigned(din.lineB.f) then
-            f <= "00000000" & (unsigned(din.lineA.f) - unsigned(din.lineB.f));
+            f <= x"00" & (unsigned(din.lineA.f) - unsigned(din.lineB.f));
         else
-            f <= "00000000" & (unsigned(din.lineB.f) - unsigned(din.lineA.f));
+            f <= x"00" & (unsigned(din.lineB.f) - unsigned(din.lineA.f));
         end if;
 
         if unsigned(din.lineA.g) > unsigned(din.lineB.g) then
-            g <= "00000000" & (unsigned(din.lineA.g) - unsigned(din.lineB.g));
+            g <= x"00" & (unsigned(din.lineA.g) - unsigned(din.lineB.g));
         else
-            g <= "00000000" & (unsigned(din.lineB.g) - unsigned(din.lineA.g));
+            g <= x"00" & (unsigned(din.lineB.g) - unsigned(din.lineA.g));
         end if;
 
         if unsigned(din.lineA.h) > unsigned(din.lineB.h) then
-            h <= "00000000" & (unsigned(din.lineA.h) - unsigned(din.lineB.h));
+            h <= x"00" & (unsigned(din.lineA.h) - unsigned(din.lineB.h));
         else
-            h <= "00000000" & (unsigned(din.lineB.h) - unsigned(din.lineA.h));
+            h <= x"00" & (unsigned(din.lineB.h) - unsigned(din.lineA.h));
         end if;
 
     end process;
@@ -105,7 +105,11 @@ begin
             ef <= e + f;
             gh <= g + h;
 
-            sad <= std_logic_vector(abcd + efgh);
+            if din.clear = '1' then
+                sad <= (others => '0');
+            else
+                sad <= abcd + efgh + sad;
+            end if;
         end if;
     end process;
 end qp_sad_tree;

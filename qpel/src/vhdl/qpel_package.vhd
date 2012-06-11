@@ -284,6 +284,7 @@ package qpel_package is
     end record;
         
     type qp_sad_tree_i is record
+        clear : std_logic;
         lineA : mb_line_t;
         lineB : mb_line_t;
     end record;
